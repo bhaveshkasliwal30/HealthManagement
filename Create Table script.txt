@@ -1,0 +1,60 @@
+CREATE TABLE Patients
+(
+        PatientId int,
+        UserId int,
+        PatientType varchar(10) check( PatientType in ('Well', 'Sick')),
+        Constraint pkPatients Primary Key(PatientId),
+        Constraint fkPatientsUsers Foreign Key (UserId) references Users(UserId)
+);
+
+Create TABLE HealthSupporter
+(
+        HealthSupporterId int,
+        IsPrimary char(1) check(IsPrimary in ('Y', 'N')),
+        UserId int not null,
+        constraint pkHealthSupporter Primary Key (HealthSupporterId),
+        constraint fkHealthSupporterUsers Foreign Key (UserId) references Users(UserId)
+)
+
+Create table HSPMap
+(
+        PatientId int,
+        HealthSupporterId int,
+        IsPrimary char(1) check(IsPrimary in ('Y', 'N')),
+        AuthorizedOn timestamp,
+        AuthorizedTill timestamp,
+        primary key (HealthSupporterId, PatientId, AuthorizedOn, AuthorizedTill)
+)
+
+Create table Diagnosis
+(
+        DiagnosisId int,
+        DiagnosisName varchar(50),
+        constraint pkDiagnosis Primary Key (DiagnosisId)
+)
+
+Create Table HealthObservations
+(
+        HealthObservationId int,
+        HealthObservationName varchar2(100),
+        ParentTypeId int,
+        Metric varchar2(20),
+        Description varchar2(100),
+        IsOrdinal char(1),
+        Primary Key (HealthObservationId),
+        Foreign Key (ParentTypeId) references ParentType(ParentTypeId)
+)
+
+Create Table Alerts
+(
+        AlertId int,
+        AlertTypeId int,
+        ClearedOn timestamp,
+        Timestamp timestamp,
+        ClearedTimetamp timestamp,
+        Desctiption varchar2(50),
+        ViewedOn timestamp,
+        ViewedBy int,
+        Primary Key (AlertId),
+        Foreign Key (ViewedBy) references Users(UserId)
+)
